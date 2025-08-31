@@ -1,7 +1,6 @@
-import { Input, Modal, Form, DatePicker } from "antd";
-import { BookRequest } from "../services/books";
+import { Input, Modal, Form } from "antd";
 import { useEffect, useState } from "react";
-import dayjs from 'dayjs';
+import { Book, BookRequest } from "../models/Book";
 
 export enum Mode {
   Create,
@@ -32,26 +31,30 @@ export const CreateUpdateBook = ({
     if (isModalOpen) {
       form.setFieldsValue({
         ...values,
-        datetime: values.datetime ? dayjs(values.datetime) : null,
       });
     }
   }, [values, form, isModalOpen]);
+
 
   const handleOk = async () => {
     try {
       setLoading(true);
       const formValues = await form.validateFields();
+      const datetime = mode === Mode.Create
+        ? new Date().toISOString()
+        : values.datetime;
+
       const bookRequest = {
         ...formValues,
-        datetime: formValues.datetime ? formValues.datetime.format('YYYY-MM-DD') : '',
+        datetime: datetime
       };
-      
+
       if (mode === Mode.Create) {
         await handleCreate(bookRequest);
       } else {
         await handleUpdate(values.id, bookRequest);
       }
-      
+
       form.resetFields();
     } catch (error) {
       console.error('Validation failed:', error);
@@ -89,13 +92,7 @@ export const CreateUpdateBook = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="datetime"
-          label="Date"
-          rules={[{ required: true, message: 'Please select date!' }]}
-        >
-          <DatePicker />
-        </Form.Item>
+        
         <Form.Item
           name="description"
           label="Description"

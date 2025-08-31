@@ -1,6 +1,7 @@
 import Card from "antd/es/card/Card"
 import { CardTitle } from "./CardTitle"
 import Button from "antd/es/button/button"
+import { Book } from "../models/Book";
 
 interface Props {
   books: Book[];
@@ -9,6 +10,21 @@ interface Props {
 }
 
 export const Books = ({ books, onEdit, onDelete }: Props) => {
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
   return (
     <div className="cards">
       {books.map((book: Book) => (
@@ -17,10 +33,8 @@ export const Books = ({ books, onEdit, onDelete }: Props) => {
           title={<CardTitle title={book.title} author={book.author} />}
           bordered={false}
         >
-          <p>
-            {book.description},
-            {book.datetime}
-          </p>
+          <p>{book.description}</p>
+          <p>Created: {formatDate(book.datetime)}</p>
           <div className="card_buttons">
             <Button
               onClick={() => onEdit(book)}

@@ -1,11 +1,7 @@
+import { Book, BookRequest } from "../models/Book";
+
 const API_BASE_URL = "http://localhost:5004";
 
-export interface BookRequest {
-  title: string;
-  author: string;
-  description: string;
-  datetime: string;
-}
 
 export interface FilterParams {
   search?: string;
@@ -68,3 +64,5 @@ export const Delete = async (id: string): Promise<void> => {
     method: "DELETE",
   });
 };
+
+export type { BookRequest };
