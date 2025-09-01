@@ -10,21 +10,6 @@ interface Props {
 }
 
 export const Books = ({ books, onEdit, onDelete }: Props) => {
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    } catch (e) {
-      return dateString;
-    }
-  };
-
   return (
     <div className="cards">
       {books.map((book: Book) => (
@@ -34,7 +19,6 @@ export const Books = ({ books, onEdit, onDelete }: Props) => {
           bordered={false}
         >
           <p>{book.description}</p>
-          <p>Created: {formatDate(book.datetime)}</p>
           <div className="card_buttons">
             <Button
               onClick={() => onEdit(book)}
